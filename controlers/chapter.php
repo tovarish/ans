@@ -5,11 +5,15 @@ class Chapter {
 		if (!$methods['1']) {
 			$methods['1'] = 'index';
 		}
-		//var_dump();
-		if ($methods['2']) {
-			$this->$methods['1']($methods['2']);
+		//var_dump($methods['1']);
+		if(method_exists('Chapter',$methods['1'])){
+			if (isset($methods['2']) && $methods['2']) {
+				$this->$methods['1']($methods['2']);
+			} else {
+				$this->$methods['1']();
+			}
 		} else {
-			$this->$methods['1']();
+			echo 'error';
 		}
 	}
 	
@@ -28,7 +32,11 @@ class Chapter {
 	function view($file, $data = null) {
 		include('view/header.php');
 		include('view/main-left.php');
-		include("view/{$file}.php");
+		if (file_exists("view/{$file}.php")) {
+			include("view/{$file}.php");
+		} else {
+			echo 'error';
+		}
 		include('view/footer.php');
 	}
 }
