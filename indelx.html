@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>test</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<script src="jquery.min.js"></script>
+	</head>
+	<body>
+		<script>
+			$(document).ready(function(){
+					var a = document.getElementById("task_4_1");
+
+					//it's important to add an load event listener to the object, as it will load the svg doc asynchronously
+					a.addEventListener("load",function(){
+						var svgDoc = a.contentDocument; //get the inner DOM of alpha.svg
+						var svgRoot  = svgDoc.documentElement;
+
+						//now we can query stuff with jquery like this
+						//note that we pass in the svgRoot as the context node!
+						//$('#path4058',svgRoot).css('stroke', 'red');
+						$('#path4058',svgRoot).click(function(){
+							alert('sdf');
+						});
+						$("#line").hover(
+							function(){ //over
+								$('#path4018',svgRoot).css('stroke', 'red');
+							},
+							function(){ //out
+								$('#path4018',svgRoot).css('stroke', '#000');
+							}
+						 );
+						 $("#ABC").hover(
+							function(){ //over
+								$('#path4206',svgRoot).css('stroke', 'red');
+							},
+							function(){ //out
+								$('#path4206',svgRoot).css('stroke', '#000');
+							}
+						 );
+					},false);
+				   
+				});
+		</script>
+		<object data="task_4_1.svg" id='task_4_1' type="image/svg+xml" ></object>
+		<div>
+			Мал. 4.2. Область допустимих розв’язків задачі
+		</div>
+		<p>
+			Область допустимих розв’язків цієї задачі дістаємо так. Кожне обмеження,
+			наприклад x1 + x2 ≤ 20 , задає півплощину з граничною прямою x1 + x2 ≤ 20 . <span id='line' style='cursor: pointer;'> Будуємо
+			її і визначаємо півплощину, яка описується нерівністю x1 + x2 ≤ 20 .</span> З цією метою в
+			нерівність x1 + x2 ≤ 20 підставляємо координати характерної точки, скажімо, x1 = 0
+			і x2 = 0 . Переконуємося, що ця точка належить півплощині x1 + x2 ≤ 20 . Цей факт на
+			мал.4.2 ілюструємо відповідною напрямленою стрілкою. Аналогічно будуємо
+			півплощини, які відповідають й іншим нерівностям. <span id='ABC' style='cursor: pointer;'>У результаті перетину цих
+			півплощин утворюється область допустимих розв'язків задачі (на мал.4.2 —
+			чотирикутник АВСD)</span>. Цільова функція
+			Z = 0,7 x1 + x2
+			являє собою сім’ю
+			паралельних прямих, кожна з яких відповідає певному значенню Z. Зокрема, якщо
+			Z = 0, то маємо 0,7 x1 + x2 = 0 . Ця пряма проходить через початок системи
+			координат. Коли Z = 3,5, то маємо пряму 0,7 x1 + x2 = 3,5 .
+		</p>
+
+		<object width="400" height="400">
+<param name="movie" value="3.swf">
+<embed src="3.swf" width="200" height="300" play="true">
+</embed>
+</object>
+
+	</body>
+</html>
+<style>
+	.pointer {
+		cursor: pointer;
+	}
+</style>
+математическое програмирование в примерах и задачах Акулич

@@ -1,0 +1,201 @@
+<script src="jquery.min.js"></script>
+<canvas id="myCanvas" width="200" height="200"></canvas>
+
+<script>
+	var ctx = document.getElementById("myCanvas").getContext("2d");
+	// Ширина и высота холста
+	var width = ctx.canvas.width;
+	var height = ctx.canvas.height;
+				
+	// Радиус и центр круга
+	var radius = 0.4 * width;
+	var cx = width / 2;
+	var cy = height / 2;
+				
+	// Делаем путь для круга от 0 до 2PI
+	ctx.beginPath();
+	ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+	ctx.closePath();
+				
+	// Устанавливаем отрисовку с тенью
+	ctx.shadowBlur = 10;
+	ctx.shadowColor = "black";
+				
+	// Устанавливаем ширину и цвет линии и отрисовываем
+	ctx.lineWidth = 25;
+	ctx.strokeStyle = "#f00";
+	ctx.stroke();
+				
+	// Убираем тень
+	ctx.shadowColor = "transparent";
+				
+	// Создаем радиальный градиент для заливки
+	var gradient = ctx.createRadialGradient(cx, cx, 0, cx, cy, radius);
+	gradient.addColorStop(0, "#ddd");
+	gradient.addColorStop(1, "#eee");
+				
+	// Устанавливаем градиент и делаем заливку
+	ctx.fillStyle = gradient;
+	ctx.fill();
+				
+	// Устанавливаем стили текста и центрирование
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+	ctx.font = "bold 55px 'Segoe UI', 'Tahoma', sans-serif";
+	ctx.fillStyle = "#333";
+				
+	// Выводим надпись
+	ctx.fillText("STOP", cx, cy);
+</script>
+
+<canvas id="myCanvas2" width="200" height="200"></canvas>
+<script>
+	// Афинные преобразования для каждой из вероятностей
+	var barnsleyMatrix = [[    0,   0,     0, 0.16, 0,    0],
+						  [ 0.85, 0.04,-0.04, 0.85, 0, 1.60],
+						  [ 0.20,-0.26, 0.23, 0.22, 0, 1.60],
+						  [-0.15, 0.28, 0.26, 0.24, 0, 0.44]];
+				
+	// Суммы вероятностей (0.01, 0.85, 0.07, 0.07)
+	var probability = [0.01, 0.86, 0.93, 1.0];
+				
+	// Контекст для работы
+	var ctx = document.getElementById("myCanvas2").getContext("2d");
+				
+	// Ширина и высота холста
+	var width = ctx.canvas.width;
+	var height = ctx.canvas.height;
+				
+	// Пиксели для изображения
+	var pixels = ctx.createImageData(width, height);
+				
+	var iterations = 50000;
+	var p, n;
+	var x = 0.0;            
+	var y = 0.0;
+	var xn, yn, xp, yp, j;
+				
+	// Итерационный процесс
+	for (var i = 0; i < iterations; i++) {
+		p = Math.random();                
+		n = 0; while (p > probability[n]) n++;
+					
+		// Новые координаты
+		xn = barnsleyMatrix[n][0] * x + barnsleyMatrix[n][1] * y + barnsleyMatrix[n][4];
+		yn = barnsleyMatrix[n][2] * x + barnsleyMatrix[n][3] * y + barnsleyMatrix[n][5];
+		x = xn;
+		y = yn;
+					
+		// Переводим в экранные координаты
+		xp = width/2 + Math.floor( x * 20);                
+		yp = height - Math.floor(y * 20);
+					
+		// Находим место в одномерном массиве пикселей
+		j = (yp * width + xp) * 4;
+		// Устанавливаем значения для компонент RGBA
+		pixels.data[j + 0] = 0;
+		pixels.data[j + 1] = 180;
+		pixels.data[j + 2] = 0;
+		pixels.data[j + 3] = 255;
+	}
+
+	// Записываем итоговый массив пикселей 
+	ctx.putImageData(pixels, 0, 0);
+</script>
+
+<canvas id="myCanvas3" width="200" height="200"></canvas>
+<script>
+	// Отрисовка спирали
+	function drawSpiral(context)
+	{
+		var cx = 0;
+		var cy = 0;
+
+		// Количество звеньев
+		var iterations = 500;
+
+		context.moveTo(cx,cy);
+		
+		var x2 = cx, y2 = cy;
+
+		for (var i = 0; i <= iterations; i++)
+		{
+			var angle = i / 10; // radians
+			var radius = angle * 2;
+
+			var x = cx + radius * Math.cos(angle);
+			var y = cy + radius * Math.sin(angle);
+
+			context.beginPath();
+			
+			var val = Math.floor(radius * 3);
+			// Затухание спирали
+			if (val > 255) val = 255;
+			context.strokeStyle='rgb(' + val + ',' + val + ',' + (255) + ')';
+
+			// Отрисовка звена
+			context.moveTo(x2, y2);
+			context.lineTo(x, y);        
+			context.stroke(); 
+
+			x2 = x;
+			y2 = y;
+		}
+	}
+	// Контекст для работы
+	var ctx = document.getElementById("myCanvas3").getContext("2d");
+				
+	// Ширина и высота холста
+	var width = ctx.canvas.width;
+	var height = ctx.canvas.height;
+
+	// Стиль линии
+	ctx.lineCap = 'round';
+	ctx.lineWidth = 8; 
+				
+	// Переносим начало координат в центр            
+	ctx.translate(width / 2, height / 2);
+						
+	// Ставим таймер
+	setInterval(function () {
+		// Очищаем экран
+		ctx.clearRect(-width / 2, -height / 2, width, height);
+		// Поворачиваем систему координат
+		ctx.rotate(-Math.PI / 180 );
+		// Рисуем спираль
+		drawSpiral(ctx);
+	}, 17);
+</script>
+<script>
+	$(document).ready(function(){
+            var a = document.getElementById("qwerty");
+
+            //it's important to add an load event listener to the object, as it will load the svg doc asynchronously
+            a.addEventListener("load",function(){
+                var svgDoc = a.contentDocument; //get the inner DOM of alpha.svg
+                var svgRoot  = svgDoc.documentElement;
+
+                //now we can query stuff with jquery like this
+                //note that we pass in the svgRoot as the context node!
+                //$('#path4058',svgRoot).css('stroke', 'red');
+                $('#path4058',svgRoot).click(function(){
+					alert('sdf');
+				});
+				 $('#qaz').click(function(){
+				$('#path4058',svgRoot).css('stroke', 'red');
+				});
+            },false);
+           
+        });/*
+$(document).ready(function(){
+	console.log($('#path4058'));
+	$('#path4058').css('stroke');
+	$('path').click(function(){
+alert('sdf');
+	});
+});*/
+
+</script>
+<object data="v.svg" id='qwerty' type="image/svg+xml" ></object>
+<div id='qaz'>ddddddd</div>
+
